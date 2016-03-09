@@ -10,7 +10,13 @@ if(filter_input(INPUT_POST, 'content')){
 
 $page = getPage(filter_input(INPUT_GET, 'page'));
 ?>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+</head>
 <body>
         
     <form method="post">
