@@ -1,5 +1,8 @@
-<?php if(isset($_SESSION)){session_destroy();unset($_SESSION['user']);};?>
 <?php session_start(); ?>
+<?php
+require_once './system/functions.php';
+securePasswords();
+?>
 <html>
     
     <title>Login</title>
@@ -13,9 +16,8 @@
         </form>
         <?php
 if(file_exists('config/user/'.filter_input(INPUT_POST, 'username').'.ini')){
-    $user = parse_ini_file('config/user/admin.ini');
-    print_r($user);
-    if($user['password'] == filter_input(INPUT_POST, 'password')){
+    $user = parse_ini_file('config/user/'.filter_input(INPUT_POST, 'username').'.ini');
+    if(password_verify(filter_input(INPUT_POST, 'password'), $user['password'])){
         $_SESSION['user'] = filter_input(INPUT_POST, 'username');
     }
 }

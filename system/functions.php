@@ -45,10 +45,6 @@ function createMenu() {
                     $page = getPage($entry);
                     if ($page && $page->settings['active'] == 'true') {
                         array_push($arrMenu, array($page->settings['url'], $page->settings['title']));
-//                        $arrMenu[$page->settings['url']] = $page->settings['title'];
-//                        echo $entry .'<br>';
-//                        echo $page->settings['title'];
-//                        echo "<hr>";
                     }
                 }
             }
@@ -56,4 +52,26 @@ function createMenu() {
         closedir($handle);
     }
     return $arrMenu;
+}
+
+function securePasswords() {
+    $arrFiles = scandir('config/user');
+    foreach ($arrFiles as $file) {
+        if($file != '.' && $file != '..' && $file !='example.ini.bak'){
+            $user = parse_ini_file('config/user/'.$file);
+            if($user['method'] == 'plain'){
+                $user['method'] = 'hash';
+                $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT );
+                iniWriter('config/user/'.$file, $user);
+            }
+        }
+    }
+}
+
+function iniWriter($filePath, $arrData){
+    $content = '';
+    foreach ($arrData as $key => $value) {
+        $content .= $key . ' = ' . $value . PHP_EOL;
+    }
+    file_put_contents($filePath, $content);
 }
