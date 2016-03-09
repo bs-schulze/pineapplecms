@@ -26,9 +26,10 @@ function getConfig() {
     return parse_ini_file('config/config.ini');
 }
 
-function savePage($title, $url, $content) {
+function savePage($title, $url, $content, $active) {
     $fileContent = '<!--title ' . $title . ' title-->' . PHP_EOL;
     $fileContent .= '<!--url ' . $url . ' url-->' . PHP_EOL;
+    $fileContent .= '<!--active ' . $active . ' active-->' . PHP_EOL;
     $fileContent .= $content;
     file_put_contents('content/' . $url . '/content.txt', $fileContent);
 }
@@ -42,7 +43,7 @@ function createMenu() {
                 if (is_dir('content/' . $entry)) {
                     $page = '';
                     $page = getPage($entry);
-                    if ($page) {
+                    if ($page && $page->settings['active'] == 'true') {
                         array_push($arrMenu, array($page->settings['url'], $page->settings['title']));
 //                        $arrMenu[$page->settings['url']] = $page->settings['title'];
 //                        echo $entry .'<br>';

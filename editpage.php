@@ -5,7 +5,7 @@ require_once './system/functions.php';
 
 $page = getPage(filter_input(INPUT_GET, 'page'));
 if(filter_input(INPUT_POST, 'content')){
-    savePage(filter_input(INPUT_POST, 'title'), filter_input(INPUT_POST, 'url'), filter_input(INPUT_POST, 'content'));
+    savePage(filter_input(INPUT_POST, 'title'), filter_input(INPUT_POST, 'url'), filter_input(INPUT_POST, 'content'), filter_input(INPUT_POST, 'active'));
 }
 
 $page = getPage(filter_input(INPUT_GET, 'page'));

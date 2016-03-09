@@ -16,7 +16,7 @@ $clean;
 if($clean){
     if(!is_dir('content/'.$clean)){
         if(mkdir('content/'.$clean)){
-            savePage($pagename, $clean, "Test");
+            savePage($pagename, $clean, "Test", 'false');
         }
     }
 }
