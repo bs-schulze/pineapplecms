@@ -2,48 +2,25 @@
 session_start(); 
 require_once './system/Parsedown.php';
 require_once './system/functions.php';
-$Parsedown = new Parsedown();
-$page = getPage(filter_input(INPUT_GET, 'page'));
+require_once('./system/smarty/Smarty.class.php');
 $config = getConfig();
+$smarty = new Smarty();
+$smarty->setTemplateDir('themes/clean');
+$smarty->assign('templateDir', 'themes/clean');
+
+$Parsedown = new Parsedown();
+if(filter_input(INPUT_GET, 'page')){    
+    $page = getPage(filter_input(INPUT_GET, 'page'));
+}else{
+    $page = getPage($config['startPage']);
+}
 $arrMenu = createMenu();
 //var_dump($page)
+$smarty->assign('metaTitle', $page->settings['title'] . ' // ' . $config['pagename']);
+$smarty->assign('pageName', $config['pagename']);
+$smarty->assign('pagenameSubtitle', $config['pagenameSubtitle']);
+$smarty->assign('arrMenu', $arrMenu);
+$smarty->assign('content', $Parsedown->text($page->content));
+$smarty->display('index.html');
 
 ?>
-<html>
-    <head>
-        <title><?php echo $page->settings['title']; ?></title>
-    </head>
-    <body>
-        <?php if(isset($_SESSION['user'])){ ?>
-        <div id="admin" style="background-color: #efefef; height: 50px; vertical-align: middle;">
-            <?php echo $_SESSION['user']; ?> | <a href="addpage.php">Seiten</a>
-        </div>
-        <?php } ?>
-        <div id="menu">
-            <ul>
-            <?php
-                foreach ($arrMenu as $menuItem) {
-                    echo '<li><a href="index.php?page='.$menuItem[0].'">'. $menuItem[1] .'</a></li>';
-                }
-            ?>
-            </ul>
-            
-        </div>
-        <div id="main">
-            <?php
-                echo $Parsedown->text($page->content);
-            ?>
-        </div>
-        <?php if($config['debug']){ ?>
-        <div style="background-color: #efefef;">
-            <pre>
-                <?php
-                var_dump($page);
-                var_dump($config);
-                var_dump(createMenu());
-                ?>
-            </pre>
-        </div>
-        <?php } ?>
-    </body>
-</html>
