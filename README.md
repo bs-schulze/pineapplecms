@@ -9,3 +9,6 @@ The system is real, real fast!
 
 ##Theme
 * Clean from http://startbootstrap.com/template-overviews/clean-blog/
+
+ToDo
+Add Blog content
