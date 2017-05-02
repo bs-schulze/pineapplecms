@@ -1,6 +1,6 @@
 <?php session_start(); ?>
 <?php
-require_once './system/functions.php';
+require_once '../system/functions.php';
 securePasswords();
 ?>
 <html>
@@ -15,8 +15,8 @@ securePasswords();
             
         </form>
         <?php
-if(file_exists('config/user/'.filter_input(INPUT_POST, 'username').'.ini')){
-    $user = parse_ini_file('config/user/'.filter_input(INPUT_POST, 'username').'.ini');
+if(file_exists(getBaseDir() . 'config/user/'.filter_input(INPUT_POST, 'username').'.ini')){
+    $user = parse_ini_file(getBaseDir() . 'config/user/'.filter_input(INPUT_POST, 'username').'.ini');
     if(password_verify(filter_input(INPUT_POST, 'password'), $user['password'])){
         $_SESSION['user'] = filter_input(INPUT_POST, 'username');
     }

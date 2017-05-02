@@ -11,7 +11,6 @@ function getPage($pagename) {
             $page->content = file_get_contents(getBaseDir() . 'content/' . $pagename . '/content.txt');
             preg_match_all("/<!--([a-z]+) (.+) ([a-z]+)-->/", $page->content, $ausgabe);
             $page->content = trim(preg_replace("/<!--([a-z]+) (.+) ([a-z]+)-->/", "", $page->content));
-//            print_R($ausgabe);
             for ($i = 0; $i < count($ausgabe[1]); $i++) {
                 $page->settings[$ausgabe[1][$i]] = $ausgabe[2][$i];
             }

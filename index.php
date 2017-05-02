@@ -11,6 +11,7 @@ $smarty->assign('templateDir', 'themes/clean');
 $Parsedown = new Parsedown();
 if(filter_input(INPUT_GET, 'page')){    
     $page = getPage(filter_input(INPUT_GET, 'page'));
+    
 }else{
     $page = getPage($config['startPage']);
 }
@@ -21,6 +22,11 @@ $smarty->assign('pageName', $config['pagename']);
 $smarty->assign('pagenameSubtitle', $config['pagenameSubtitle']);
 $smarty->assign('arrMenu', $arrMenu);
 $smarty->assign('content', $Parsedown->text($page->content));
+if($page->settings['active'] == 'false'){
+    $smarty->assign('content', '404 Seite nicht gefunden');
+        
+}
 $smarty->display('index.html');
+
 
 ?>
