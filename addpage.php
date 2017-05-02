@@ -14,8 +14,8 @@ $clean = preg_replace("/[\/_|+ -]+/", '-', $clean);
 $clean = strtolower(trim($clean, '-'));
 $clean;
 if($clean){
-    if(!is_dir('content/'.$clean)){
-        if(mkdir('content/'.$clean)){
+    if(!is_dir(getBaseDir() .'content/'.$clean)){
+        if(mkdir(getBaseDir() .'content/'.$clean)){
             savePage($pagename, $clean, "Test", 'false');
         }
     }
@@ -24,7 +24,7 @@ if($clean){
 <hr>
 
 <?php
-$handle = opendir('content');
+$handle = opendir(getBaseDir() .'content');
 if ($handle) {
     echo "Seiten<ul>";
     /* Das ist der korrekte Weg, ein Verzeichnis zu durchlaufen. */

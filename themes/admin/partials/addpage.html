@@ -1,0 +1,19 @@
+<div>
+            Seiten
+            <ul>
+                {foreach from=$arrPages item=$page}
+                <li><a href="editpage.php?page={$page}">{$page}</a></li>
+                {/foreach}
+            </ul>
+        </div>
+        
+        <div>
+            <form method="post">
+    Pagename: <input type="text" name="pagename">
+    <input type="submit">
+</form>
+<form method="post">
+    <textarea name="text"></textarea><br>
+    <input type="submit">
+</form>
+        </div>

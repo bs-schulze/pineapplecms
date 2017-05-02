@@ -1,12 +1,14 @@
 <?php
-
+function getBaseDir(){
+    return '/var/www/pineapplecms/';
+}
 function getPage($pagename) {
 
     $page = new stdClass();
     $page->name = $pagename;
-    if (is_dir('content/' . $pagename)) {
-        if (file_exists('content/' . $pagename . '/content.txt')) {
-            $page->content = file_get_contents('content/' . $pagename . '/content.txt');
+    if (is_dir(getBaseDir() . 'content/' . $pagename)) {
+        if (file_exists(getBaseDir() . 'content/' . $pagename . '/content.txt')) {
+            $page->content = file_get_contents(getBaseDir() . 'content/' . $pagename . '/content.txt');
             preg_match_all("/<!--([a-z]+) (.+) ([a-z]+)-->/", $page->content, $ausgabe);
             $page->content = trim(preg_replace("/<!--([a-z]+) (.+) ([a-z]+)-->/", "", $page->content));
 //            print_R($ausgabe);
@@ -23,7 +25,7 @@ function getPage($pagename) {
 }
 
 function getConfig() {
-    return parse_ini_file('config/config.ini');
+    return parse_ini_file(getBaseDir() . 'config/config.ini');
 }
 
 function savePage($title, $url, $content, $active) {
@@ -31,7 +33,7 @@ function savePage($title, $url, $content, $active) {
     $fileContent .= '<!--url ' . $url . ' url-->' . PHP_EOL;
     $fileContent .= '<!--active ' . $active . ' active-->' . PHP_EOL;
     $fileContent .= $content;
-    file_put_contents('content/' . $url . '/content.txt', $fileContent);
+    file_put_contents(getBaseDir() . 'content/' . $url . '/content.txt', $fileContent);
 }
 
 function createMenu() {
@@ -40,7 +42,7 @@ function createMenu() {
     if ($handle) {
         while (false !== ($entry = readdir($handle))) {
             if ($entry != '.' && $entry != '..') {
-                if (is_dir('content/' . $entry)) {
+                if (is_dir(getBaseDir() . 'content/' . $entry)) {
                     $page = '';
                     $page = getPage($entry);
                     if ($page && $page->settings['active'] == 'true') {
@@ -55,14 +57,14 @@ function createMenu() {
 }
 
 function securePasswords() {
-    $arrFiles = scandir('config/user');
+    $arrFiles = scandir(getBaseDir() . 'config/user');
     foreach ($arrFiles as $file) {
         if($file != '.' && $file != '..' && $file !='example.ini.bak'){
-            $user = parse_ini_file('config/user/'.$file);
+            $user = parse_ini_file(getBaseDir() . 'config/user/'.$file);
             if($user['method'] == 'plain'){
                 $user['method'] = 'hash';
                 $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT );
-                iniWriter('config/user/'.$file, $user);
+                iniWriter(getBaseDir() . 'config/user/'.$file, $user);
             }
         }
     }
