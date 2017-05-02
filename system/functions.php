@@ -32,6 +32,7 @@ function savePage($title, $url, $content, $active) {
     $fileContent .= '<!--url ' . $url . ' url-->' . PHP_EOL;
     $fileContent .= '<!--active ' . $active . ' active-->' . PHP_EOL;
     $fileContent .= $content;
+    copy(getBaseDir() . 'content/' . $url . '/content.txt', getBaseDir() . 'content/' . $url . '/content.txt.bak');
     file_put_contents(getBaseDir() . 'content/' . $url . '/content.txt', $fileContent);
 }
 
