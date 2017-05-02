@@ -15,19 +15,7 @@ if(isset($_SESSION['user'])) {
     header('Location: login.php');
 }
 
-$handle = opendir(getBaseDir() . '/content');
-$arrPages = array();
-if ($handle) {
-    
-    /* Das ist der korrekte Weg, ein Verzeichnis zu durchlaufen. */
-    while (false !== ($entry = readdir($handle))) {
-        if($entry != '.' && $entry != '..'){
-            array_push($arrPages, $entry);
-        }
-    }
-    closedir($handle);
-}
-$smarty->assign('arrPages', $arrPages);
+$smarty->assign('arrPages', getAllPages());
 $smarty->assign('main', $smarty->fetch($smarty->getTemplateDir(0) . 'partials/addpage.html'));
 ?>
 <?php $smarty->display('index.html');?>

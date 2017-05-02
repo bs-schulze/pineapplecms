@@ -2,7 +2,7 @@
             Seiten
             <ul>
                 {foreach from=$arrPages item=$page}
-                <li><a href="editpage.php?page={$page}">{$page}</a></li>
+                <li><a href="editpage.php?page={$page->name}">{$page->settings.title}</a></li>
                 {/foreach}
             </ul>
         </div>
