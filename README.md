@@ -9,6 +9,9 @@ The system is real, real fast!
 
 ## Theme
 * Clean from http://startbootstrap.com/template-overviews/clean-blog/
+* Admin Theme: [Bootstrap Admin Theme 3](https://github.com/VinceG/Bootstrap-Admin-Theme)
+
+
 
 ToDo
 Add Blog content

@@ -1,7 +1,27 @@
 <?php
-function getBaseDir(){
+
+function getBaseDir() {
     return '/var/www/pineapplecms/';
 }
+
+function getAllPages() {
+    $handle = opendir(getBaseDir() . 'content');
+    $arrPages = [];
+    if ($handle) {
+        while (false !== ($entry = readdir($handle))) {
+            if ($entry != '.' && $entry != '..') {
+                if (is_dir(getBaseDir() . 'content/' . $entry)) {
+                    $page = '';
+                    $page = getPage($entry);
+                    array_push($arrPages, $page);
+                }
+            }
+        }
+        closedir($handle);
+    }
+    return $arrPages;
+}
+
 function getPage($pagename) {
 
     $page = new stdClass();
@@ -32,25 +52,19 @@ function savePage($title, $url, $content, $active) {
     $fileContent .= '<!--url ' . $url . ' url-->' . PHP_EOL;
     $fileContent .= '<!--active ' . $active . ' active-->' . PHP_EOL;
     $fileContent .= $content;
+    copy(getBaseDir() . 'content/' . $url . '/content.txt', getBaseDir() . 'content/' . $url . '/content.txt.bak');
     file_put_contents(getBaseDir() . 'content/' . $url . '/content.txt', $fileContent);
 }
 
 function createMenu() {
-    $handle = opendir('content');
+    $arrPages = getAllPages();
     $arrMenu = [];
-    if ($handle) {
-        while (false !== ($entry = readdir($handle))) {
-            if ($entry != '.' && $entry != '..') {
-                if (is_dir(getBaseDir() . 'content/' . $entry)) {
-                    $page = '';
-                    $page = getPage($entry);
-                    if ($page && $page->settings['active'] == 'true') {
-                        array_push($arrMenu, array($page->settings['url'], $page->settings['title']));
-                    }
-                }
+    if ($arrPages) {
+        foreach ($arrPages as $page) {
+            if ($page && $page->settings['active'] == 'true') {
+                array_push($arrMenu, array($page->settings['url'], $page->settings['title']));
             }
         }
-        closedir($handle);
     }
     return $arrMenu;
 }
@@ -58,18 +72,18 @@ function createMenu() {
 function securePasswords() {
     $arrFiles = scandir(getBaseDir() . 'config/user');
     foreach ($arrFiles as $file) {
-        if($file != '.' && $file != '..' && $file !='example.ini.bak'){
-            $user = parse_ini_file(getBaseDir() . 'config/user/'.$file);
-            if($user['method'] == 'plain'){
+        if ($file != '.' && $file != '..' && $file != 'example.ini.bak') {
+            $user = parse_ini_file(getBaseDir() . 'config/user/' . $file);
+            if ($user['method'] == 'plain') {
                 $user['method'] = 'hash';
-                $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT );
-                iniWriter(getBaseDir() . 'config/user/'.$file, $user);
+                $user['password'] = password_hash($user['password'], PASSWORD_BCRYPT);
+                iniWriter(getBaseDir() . 'config/user/' . $file, $user);
             }
         }
     }
 }
 
-function iniWriter($filePath, $arrData){
+function iniWriter($filePath, $arrData) {
     $content = '';
     foreach ($arrData as $key => $value) {
         $content .= $key . ' = ' . $value . PHP_EOL;

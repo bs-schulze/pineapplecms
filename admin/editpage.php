@@ -21,19 +21,9 @@ if(filter_input(INPUT_POST, 'content')){
 }
 
 $page = getPage(filter_input(INPUT_GET, 'page'));
+$smarty->assign('page', $page);
+$smarty->assign('main', $smarty->fetch($smarty->getTemplateDir(0) . 'partials/editpage.html'));
+$smarty->display('index.html');
 ?>
 
         
-    <form method="post">
-<?php
-foreach ($page->settings as $key => $value) {
-    echo $key. ': <input type="text" name="'.$key.'" value="'.$value.'"><br>';
-}
-?>
-        <textarea name="content"><?php echo $page->content ?></textarea><br>
-<input type="submit">
-</form>  
-
-<iframe width ="100%" height="400px" src="http://localhost/pineapplecms/index.php?page=<?php echo filter_input(INPUT_GET, 'page') ?>">
-
-
