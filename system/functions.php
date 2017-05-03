@@ -83,6 +83,18 @@ function securePasswords() {
     }
 }
 
+function getAllUsers() {
+    $arrUsers = array();
+    $arrFiles = scandir(getBaseDir() . 'config/user');
+    foreach ($arrFiles as $file) {
+        if ($file != '.' && $file != '..' && $file != 'example.ini.bak') {
+            $user = parse_ini_file(getBaseDir() . 'config/user/' . $file);
+            array_push($arrUsers, $user);
+        }
+    }
+    return $arrUsers;
+}
+
 function iniWriter($filePath, $arrData) {
     $content = '';
     foreach ($arrData as $key => $value) {
