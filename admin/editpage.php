@@ -1,29 +1,28 @@
-<?php 
+<?php
+
 session_start();
 require_once '../system/functions.php';
+require_once '../system/Backend.php';
 
-require_once('../system/smarty/Smarty.class.php');
-$config = getConfig();
-$smarty = new Smarty();
-$smarty->setTemplateDir(getBaseDir().'themes/admin2');
-$smarty->setCompileDir(getBaseDir().'templates_c');
-$smarty->assign('templateDir', 'themes/admin2');
+class EditPage extends Backend {
 
-if(isset($_SESSION['user'])) {
-    $smarty->assign('userName', $_SESSION['user'] );
-}else{
-    header('Location: login.php');
+    public function __construct() {
+        parent::__construct();
+        
+        $page = getPage(filter_input(INPUT_GET, 'page'));
+        if (filter_input(INPUT_POST, 'content')) {
+            savePage(filter_input(INPUT_POST, 'title'), filter_input(INPUT_POST, 'url'), filter_input(INPUT_POST, 'content'), filter_input(INPUT_POST, 'active'));
+        }
+
+        $page = getPage(filter_input(INPUT_GET, 'page'));
+        $this->smarty->assign('page', $page);
+        $this->smarty->assign('main', $this->smarty->fetch($this->smarty->getTemplateDir(0) . 'partials/editpage.html'));
+        $this->smarty->display('index.html');
+    }
+
 }
 
-$page = getPage(filter_input(INPUT_GET, 'page'));
-if(filter_input(INPUT_POST, 'content')){
-    savePage(filter_input(INPUT_POST, 'title'), filter_input(INPUT_POST, 'url'), filter_input(INPUT_POST, 'content'), filter_input(INPUT_POST, 'active'));
-}
-
-$page = getPage(filter_input(INPUT_GET, 'page'));
-$smarty->assign('page', $page);
-$smarty->assign('main', $smarty->fetch($smarty->getTemplateDir(0) . 'partials/editpage.html'));
-$smarty->display('index.html');
+$editPage = new EditPage();
 ?>
 
-        
+

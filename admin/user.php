@@ -1,20 +1,19 @@
 <?php
+
 session_start();
 require_once '../system/functions.php';
+require_once '../system/Backend.php';
 
-require_once('../system/smarty/Smarty.class.php');
-$config = getConfig();
-$smarty = new Smarty();
-$smarty->setTemplateDir(getBaseDir().'themes/admin2');
-$smarty->setCompileDir(getBaseDir().'templates_c');
-$smarty->assign('templateDir', 'themes/admin2');
+$backend = new Backend();
 
-if(isset($_SESSION['user'])) {
-    $smarty->assign('userName', $_SESSION['user'] );
-}else{
-    header('Location: login.php');
+class User extends Backend {
+
+    public function __construct() {
+        parent::__construct();
+        $this->smarty->assign('arrUsers', getAllUsers());
+        $this->smarty->assign('main', $this->smarty->fetch($this->smarty->getTemplateDir(0) . 'partials/user.html'));
+        $this->smarty->display('index.html');
+    }
 }
-$smarty->assign('arrUsers', getAllUsers());
-$smarty->assign('main', $smarty->fetch($smarty->getTemplateDir(0) . 'partials/user.html'));
-$smarty->display('index.html');
-?>
+
+$user = new User();
