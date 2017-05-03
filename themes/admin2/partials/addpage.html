@@ -2,7 +2,7 @@
     <div class="col-md-6">
         <div class="content-box-large">
             <div class="panel-heading">
-                <div class="panel-title">Basic Table</div>
+                <div class="panel-title">Pages</div>
 
                 <div class="panel-options">
                     <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
@@ -21,7 +21,7 @@
                     <tbody>
                         {foreach from=$arrPages item=$page}
                             <tr>
-                                <td>1</td>
+                                <td>{$page@iteration}</td>
                                 <td><a href="editpage.php?page={$page->name}">{$page->settings.title}</a></td>
                             </tr>
                         {/foreach}
