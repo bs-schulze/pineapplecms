@@ -25,7 +25,7 @@ class Frontend {
             $page = getPage($config['startPage']);
         }
         $this->smarty->assign('arrMenu', $arrMenu);
-        $this->smarty->assign('metaTitle', $page->settings['title'] . ' // ' . $config['pagename']);
+        $this->smarty->assign('metaTitle', $page->getTitle() . ' // ' . $config['pagename']);
         $this->smarty->assign('pageName', $config['pagename']);
         $this->smarty->assign('pagenameSubtitle', $config['pagenameSubtitle']);
         $this->smarty->assign('content', $this->Parsedown->text($page->getContent()));

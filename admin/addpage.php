@@ -53,7 +53,6 @@ $clean =$maxNumber.'-'.$clean;
             $myPage->setName($pagename);
             $myPage->setPublished(false);
             $myPage->setUrl($clean);
-            $myPage->setContent('** TESTPAGE');
             $myPage->save(getBaseDir() . 'content/' . $clean . '/content.yml');
         }
     }
