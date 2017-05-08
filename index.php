@@ -6,7 +6,4 @@ require_once './system/Frontend.php';
 
 $frontend = new Frontend();
 
-
-
-
 ?>

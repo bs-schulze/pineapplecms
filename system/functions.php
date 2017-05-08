@@ -1,5 +1,5 @@
 <?php
-
+require_once 'Spyc.php';
 function getBaseDir() {
     return '/var/www/pineapplecms/';
 }
@@ -13,6 +13,7 @@ function getAllPages() {
                 if (is_dir(getBaseDir() . 'content/' . $entry)) {
                     $page = '';
                     $page = getPage($entry);
+                    $page->dirName = $entry;
                     array_push($arrPages, $page);
                 }
             }
@@ -24,16 +25,16 @@ function getAllPages() {
 
 function getPage($pagename) {
 
-    $page = new stdClass();
-    $page->name = $pagename;
+    $page = new PageModel();
+    
     if (is_dir(getBaseDir() . 'content/' . $pagename)) {
-        if (file_exists(getBaseDir() . 'content/' . $pagename . '/content.txt')) {
-            $page->content = file_get_contents(getBaseDir() . 'content/' . $pagename . '/content.txt');
-            preg_match_all("/<!--([a-z]+) (.+) ([a-z]+)-->/", $page->content, $ausgabe);
-            $page->content = trim(preg_replace("/<!--([a-z]+) (.+) ([a-z]+)-->/", "", $page->content));
-            for ($i = 0; $i < count($ausgabe[1]); $i++) {
-                $page->settings[$ausgabe[1][$i]] = $ausgabe[2][$i];
-            }
+        if (file_exists(getBaseDir() . 'content/' . $pagename . '/content.yml')) {
+            $arrPage =  Spyc::YAMLLoad(getBaseDir() . 'content/' . $pagename . '/content.yml');
+            $page->setName($arrPage['name']);
+            $page->setTitle($arrPage['title']);
+            $page->setPublished($arrPage['published']);
+            $page->setUrl($arrPage['url']);
+            $page->setContent($arrPage['content']);
         } else {
             return false;
         }
@@ -52,7 +53,9 @@ function savePage($title, $url, $content, $active) {
     $fileContent .= '<!--url ' . $url . ' url-->' . PHP_EOL;
     $fileContent .= '<!--active ' . $active . ' active-->' . PHP_EOL;
     $fileContent .= $content;
-    copy(getBaseDir() . 'content/' . $url . '/content.txt', getBaseDir() . 'content/' . $url . '/content.txt.bak');
+    if(file_exists(getBaseDir() . 'content/' . $url . '/content.txt')){
+        copy(getBaseDir() . 'content/' . $url . '/content.txt', getBaseDir() . 'content/' . $url . '/content.txt.bak');
+    }
     file_put_contents(getBaseDir() . 'content/' . $url . '/content.txt', $fileContent);
 }
 
@@ -61,8 +64,8 @@ function createMenu() {
     $arrMenu = [];
     if ($arrPages) {
         foreach ($arrPages as $page) {
-            if ($page && $page->settings['active'] == 'true') {
-                array_push($arrMenu, array($page->settings['url'], $page->settings['title']));
+            if ($page && $page->isPublished() == 'true') {
+                array_push($arrMenu, array($page->getUrl(), $page->getName()));
             }
         }
     }

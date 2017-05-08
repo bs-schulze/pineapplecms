@@ -3,6 +3,7 @@
 session_start();
 require_once '../system/functions.php';
 require_once '../system/Backend.php';
+require_once '../system/PageModel.php';
 
 class EditPage extends Backend {
 
@@ -10,12 +11,14 @@ class EditPage extends Backend {
         parent::__construct();
         
         $page = getPage(filter_input(INPUT_GET, 'page'));
+        
         if (filter_input(INPUT_POST, 'content')) {
-            savePage(filter_input(INPUT_POST, 'title'), filter_input(INPUT_POST, 'url'), filter_input(INPUT_POST, 'content'), filter_input(INPUT_POST, 'active'));
+            $page->setContent(filter_input(INPUT_POST, 'content'));
+            $page->save(getBaseDir() . 'content/' . filter_input(INPUT_GET, 'page') . '/content.yml');
         }
-
         $page = getPage(filter_input(INPUT_GET, 'page'));
-        $this->smarty->assign('page', $page);
+        var_dump($page);
+        $this->smarty->assign('page', $page->getData());
         $this->smarty->assign('main', $this->smarty->fetch($this->smarty->getTemplateDir(0) . 'partials/editpage.html'));
         $this->smarty->display('index.html');
     }

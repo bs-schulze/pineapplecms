@@ -15,22 +15,62 @@
                         <tr>
                             <th>#</th>
                             <th>Seite</th>
-                           
+                            <th>aktiv</th>
+
                         </tr>
                     </thead>
                     <tbody>
                         {foreach from=$arrPages item=$page}
-                            <tr>
-                                <td>{$page@iteration}</td>
-                                <td><a href="editpage.php?page={$page->name}">{$page->settings.title}</a></td>
-                            </tr>
+                        <tr>
+                            <td>{$page@iteration}</td>
+                            <td><a href="editpage.php?page={$page.url}">{$page.name}</a></td>
+                            <td>{if $page.published eq "true"}
+                                <span class="glyphicon glyphicon-eye-open green"></span>
+                                {else}
+                                <span class="glyphicon glyphicon-eye-close red"></span>
+                                {/if}</td>
+                        </tr>
                         {/foreach}
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <div class="col-md-6">
+        <div class="content-box-large">
+            <div class="panel-heading">
+                <div class="panel-title">Add Page</div>
+
+                <div class="panel-options">
+                    <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                    <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form method="post">
+                <fieldset>
+                   
+                    <div class="form-group">
+                        <label>Pagename</label>
+                        <input class="form-control" name="pagename" value="" type="text">
+                    </div>
+                   
+                </fieldset>
+                <div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i>
+                        Submit
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+
+
+
 
 
 

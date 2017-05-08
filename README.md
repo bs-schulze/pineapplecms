@@ -6,6 +6,7 @@ The system is real, real fast!
 ## Uses Libraries:
 * Smarty
 * ParseDown
+* Yaml Parser from [spyc](https://github.com/mustangostang/spyc)
 
 ## Theme
 * Clean from http://startbootstrap.com/template-overviews/clean-blog/
